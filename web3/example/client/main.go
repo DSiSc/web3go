@@ -32,10 +32,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/alanchchen/web3go/common"
-	"github.com/alanchchen/web3go/provider"
-	"github.com/alanchchen/web3go/rpc"
-	"github.com/alanchchen/web3go/web3"
+	"github.com/DSiSc/web3go/common"
+	"github.com/DSiSc/web3go/provider"
+	"github.com/DSiSc/web3go/rpc"
+	"github.com/DSiSc/web3go/web3"
 	"math/big"
 )
 

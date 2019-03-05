@@ -35,8 +35,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/alanchchen/web3go/common"
-	"github.com/alanchchen/web3go/test"
+	"github.com/DSiSc/web3go/common"
+	"github.com/DSiSc/web3go/test"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )

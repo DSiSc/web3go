@@ -35,8 +35,8 @@ import (
 	"math/big"
 	"strconv"
 
-	"github.com/alanchchen/web3go/common"
-	"github.com/alanchchen/web3go/rpc"
+	"github.com/DSiSc/web3go/common"
+	"github.com/DSiSc/web3go/rpc"
 )
 
 // Eth ...
