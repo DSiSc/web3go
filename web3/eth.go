@@ -580,7 +580,7 @@ func (eth *EthAPI) GetTransactionByHash(hash common.Hash) (*common.Transaction, 
 
 	result := &jsonTransaction{}
 	if jsonBytes, err := json.Marshal(resp.Get("result")); err == nil {
-		if err := json.Unmarshal(jsonBytes, result); err == nil {
+		if err := result.Unmarshal(jsonBytes); err == nil {
 			return result.ToTransaction(), nil
 		}
 	}

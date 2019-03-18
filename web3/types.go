@@ -81,33 +81,87 @@ func (b *jsonBlock) ToBlock() (block *common.Block) {
 }
 
 type jsonTransaction struct {
-	Hash             common.Hash    `json:"hash"`
-	Nonce            common.Hash    `json:"nonce"`
-	BlockHash        common.Hash    `json:"blockHash"`
-	BlockNumber      json.Number    `json:"blockNumber"`
-	TransactionIndex uint64         `json:"transactionIndex"`
-	From             common.Address `json:"from"`
-	To               common.Address `json:"to"`
-	Gas              json.Number    `json:"gas"`
-	GasPrice         json.Number    `json:"gasprice"`
-	Value            json.Number    `json:"value"`
-	Data             []byte         `json:"input"`
+	Hash             string    `json:"hash"`
+	Nonce            string    `json:"nonce"`
+	BlockHash        string    `json:"blockHash"`
+	BlockNumber      string    `json:"blockNumber"`
+	TransactionIndex string    `json:"transactionIndex"`
+	From             string    `json:"from"`
+	To               string    `json:"to"`
+	Gas              string    `json:"gas"`
+	GasPrice         string    `json:"gasPrice"`
+	Value            string    `json:"value"`
+	Data             string         `json:"input"`
+	R                string         `json:"r"`
+	S                string         `json:"s"`
+	V                string         `json:"v"`
 }
 
 func (t *jsonTransaction) ToTransaction() (tx *common.Transaction) {
 	tx = &common.Transaction{}
-	tx.Hash = t.Hash
-	tx.Nonce = t.Nonce
-	tx.BlockHash = t.BlockHash
-	tx.BlockNumber = jsonNumbertoInt(t.BlockNumber)
-	tx.TransactionIndex = t.TransactionIndex
-	tx.From = t.From
-	tx.To = t.To
-	tx.Gas = jsonNumbertoInt(t.Gas)
-	tx.GasPrice = jsonNumbertoInt(t.GasPrice)
-	tx.Value = jsonNumbertoInt(t.Value)
-	tx.Data = t.Data
+
+	tx.Hash = common.StringToHash(t.Hash)
+	tx.Nonce = common.StringToHash(t.Nonce)
+	tx.BlockHash = common.StringToHash(t.BlockHash)
+	tx.BlockNumber = jsonNumbertoInt(json.Number(t.BlockNumber))
+	txIndex, _ := json.Number(t.TransactionIndex).Int64()
+	tx.TransactionIndex = uint64(txIndex)
+	tx.From = common.StringToAddress(t.From)
+	tx.To = common.StringToAddress(t.To)
+	tx.Gas = jsonNumbertoInt(json.Number(t.Gas))
+	tx.GasPrice = jsonNumbertoInt(json.Number(t.GasPrice))
+	tx.Value = jsonNumbertoInt(json.Number(t.Value))
+	tx.Data = common.HexToBytes(t.Data)
+	tx.R = common.HexToBytes(t.R)
+	tx.S = common.HexToBytes(t.S)
+	tx.V = common.HexToBytes(t.V)
+
+	//tx.Hash = t.Hash
+	//tx.Nonce = t.Nonce
+	//tx.BlockHash = t.BlockHash
+	//tx.BlockNumber = jsonNumbertoInt(t.BlockNumber)
+	//tx.TransactionIndex = t.TransactionIndex
+	//tx.From = t.From
+	//tx.To = t.To
+	//tx.Gas = jsonNumbertoInt(t.Gas)
+	//tx.GasPrice = jsonNumbertoInt(t.GasPrice)
+	//tx.Value = jsonNumbertoInt(t.Value)
+	//tx.Data = t.Data
+	//tx.R = t.R
+	//tx.S = t.S
+	//tx.V = t.V
+
 	return tx
+}
+
+func (tx *jsonTransaction) Unmarshal(data []byte) error{
+	var result map[string]string
+	err := json.Unmarshal(data, &result)
+	if err != nil {
+		return err
+	}
+
+	tx.Hash = result["hash"]
+	tx.Nonce = result["nonce"]
+	tx.BlockHash = result["blockHash"]
+	tx.BlockNumber = result["blockNumber"]
+	tx.TransactionIndex = result["transactionIndex"]
+	tx.From = result["from"]
+	tx.To = result["to"]
+	tx.Gas = result["gas"]
+	tx.GasPrice = result["gasPrice"]
+	tx.Value = result["value"]
+	tx.Data = result["input"]
+	tx.R = result["r"]
+	tx.S = result["s"]
+	tx.V = result["v"]
+
+	return nil
+}
+
+func (tx *jsonTransaction) String() string {
+	jsonBytes, _ := json.Marshal(tx)
+	return string(jsonBytes)
 }
 
 type jsonTransactionReceipt struct {

@@ -35,6 +35,7 @@ import (
 	"sync/atomic"
 	"github.com/DSiSc/web3go/rlp"
 	"io"
+	"fmt"
 )
 
 const (
@@ -104,11 +105,31 @@ type Transaction struct {
 	GasPrice         *big.Int `json:"gasprice"`
 	Value            *big.Int `json:"value"`
 	Data             []byte   `json:"input"`
+	R                []byte         `json:"r"`
+	S                []byte         `json:"s"`
+	V                []byte         `json:"v"`
 }
 
 func (tx *Transaction) String() string {
-	jsonBytes, _ := json.Marshal(tx)
-	return string(jsonBytes)
+	hash := tx.Hash.String()
+	nonce := tx.Nonce.String()
+	blockHash := tx.BlockHash.String()
+	blockNumber := tx.BlockNumber.Uint64()
+	transactionIndex := tx.TransactionIndex
+	from := tx.From.String()
+	to := tx.To.String()
+	gas := tx.Gas.Uint64()
+	gasPrice := tx.GasPrice.Int64()
+	value := tx.Value.Uint64()
+	input := BytesToHex(tx.Data)
+	r := BytesToHex(tx.R)
+	s := BytesToHex(tx.S)
+	v := BytesToHex(tx.V)
+
+	strTx := fmt.Sprintf("{hash: %s, nonce: %s, blockHash: %s, blockNumber : 0x%x, transactionIndex: 0x%x, " +
+		"from: %s, to: %s, gas: 0x%x, gasPrice: 0x%x, value: 0x%x, input: %s, r: %s, s: %s, v: %s}", hash, nonce, blockHash, blockNumber, transactionIndex, from, to, gas, gasPrice, value, input, r, s, v)
+
+	return strTx
 }
 
 type Topic struct {
