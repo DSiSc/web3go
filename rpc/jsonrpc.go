@@ -91,6 +91,7 @@ func (req *JSONRPCRequest) Get(key string) interface{} {
 // String ...
 func (req *JSONRPCRequest) String() string {
 	jsonBytes, _ := json.Marshal(req)
+	fmt.Println(string(jsonBytes))
 	return string(jsonBytes)
 }
 

@@ -32,7 +32,6 @@ package web3
 import (
 	"encoding/json"
 	"math/big"
-
 	"github.com/DSiSc/web3go/common"
 )
 
@@ -101,7 +100,7 @@ func (t *jsonTransaction) ToTransaction() (tx *common.Transaction) {
 	tx = &common.Transaction{}
 
 	tx.Hash = common.StringToHash(t.Hash)
-	tx.Nonce = common.StringToHash(t.Nonce)
+	tx.Nonce = jsonNumbertoInt(json.Number(t.Nonce))
 	tx.BlockHash = common.StringToHash(t.BlockHash)
 	tx.BlockNumber = jsonNumbertoInt(json.Number(t.BlockNumber))
 	txIndex, _ := json.Number(t.TransactionIndex).Int64()

@@ -95,7 +95,7 @@ func (tx *TransactionRequest) String() string {
 // Transaction ...
 type Transaction struct {
 	Hash             Hash     `json:"hash"`
-	Nonce            Hash     `json:"nonce"`
+	Nonce            *big.Int     `json:"nonce"`
 	BlockHash        Hash     `json:"blockHash"`
 	BlockNumber      *big.Int `json:"blockNumber"`
 	TransactionIndex uint64   `json:"transactionIndex"`
@@ -112,7 +112,7 @@ type Transaction struct {
 
 func (tx *Transaction) String() string {
 	hash := tx.Hash.String()
-	nonce := tx.Nonce.String()
+	nonce := tx.Nonce.Uint64()
 	blockHash := tx.BlockHash.String()
 	blockNumber := tx.BlockNumber.Uint64()
 	transactionIndex := tx.TransactionIndex
@@ -126,7 +126,7 @@ func (tx *Transaction) String() string {
 	s := BytesToHex(tx.S)
 	v := BytesToHex(tx.V)
 
-	strTx := fmt.Sprintf("{hash: %s, nonce: %s, blockHash: %s, blockNumber : 0x%x, transactionIndex: 0x%x, " +
+	strTx := fmt.Sprintf("{hash: %s, nonce: 0x%x, blockHash: %s, blockNumber : 0x%x, transactionIndex: 0x%x, " +
 		"from: %s, to: %s, gas: 0x%x, gasPrice: 0x%x, value: 0x%x, input: %s, r: %s, s: %s, v: %s}", hash, nonce, blockHash, blockNumber, transactionIndex, from, to, gas, gasPrice, value, input, r, s, v)
 
 	return strTx
