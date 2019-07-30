@@ -60,6 +60,8 @@ type Eth interface {
 	Sign(address common.Address, data []byte) ([]byte, error)
 	SendTransaction(tx *common.TransactionRequest) (common.Hash, error)
 	SendRawTransaction(tx []byte) (common.Hash, error)
+	SendCrossRawTransaction(tx []byte, url  string ) (common.Hash, error)
+	ReceiveCrossRawTransactionReq(tx []byte) (common.Hash, error)
 	Call(tx *common.TransactionRequest, quantity string) ([]byte, error)
 	EstimateGas(tx *common.TransactionRequest, quantity string) (*big.Int, error)
 	GetBlockByHash(hash common.Hash, full bool) (*common.Block, error)
@@ -478,6 +480,41 @@ func (eth *EthAPI) SendRawTransaction(tx []byte) (hash common.Hash, err error) {
 	return common.StringToHash(resp.Get("result").(string)), nil
 }
 
+// SendCrossRawTransaction creates new message call transaction or a contract
+// creation for signed transactions.
+func (eth *EthAPI) SendCrossRawTransaction(tx []byte, url string) (common.Hash, error) {
+	req := eth.requestManager.newRequest("eth_sendCrossRawTransaction")
+	req.Set("params", []string{common.BytesToHex(tx), url})
+	resp, err := eth.requestManager.send(req)
+	if err != nil {
+		return common.NewHash(nil), err
+	}
+
+	if resp.Error() != nil {
+		return common.NewHash(nil), resp.Error()
+	}
+
+	return common.StringToHash(resp.Get("result").(string)), nil
+}
+
+// ReceiveCrossRawTransaction creates new message call transaction or a contract
+// creation for signed transactions.
+// Must call sendCrossRawTransaction before this
+func (eth *EthAPI) ReceiveCrossRawTransactionReq(tx []byte) (common.Hash, error) {
+	req := eth.requestManager.newRequest("eth_receiveCrossRawTransactionReq")
+	req.Set("params", []string{common.BytesToHex(tx)})
+	resp, err := eth.requestManager.send(req)
+	if err != nil {
+		return common.NewHash(nil), err
+	}
+
+	if resp.Error() != nil {
+		return common.NewHash(nil), resp.Error()
+	}
+
+	return common.StringToHash(resp.Get("result").(string)), nil
+}
+
 // Call executes a new message call immediately without creating a transaction
 // on the block chain.
 func (eth *EthAPI) Call(tx *common.TransactionRequest, quantity string) ([]byte, error) {
@@ -651,7 +688,9 @@ func (eth *EthAPI) GetTransactionReceipt(hash common.Hash) (*common.TransactionR
 
 	result := &jsonTransactionReceipt{}
 	if jsonBytes, err := json.Marshal(resp.Get("result")); err == nil {
-		if err := json.Unmarshal(jsonBytes, result); err == nil {
+		//err := json.Unmarshal(jsonBytes, result)
+		err := result.UnmarshalJSON(jsonBytes)
+		if err == nil {
 			return result.ToTransactionReceipt(), nil
 		}
 	}

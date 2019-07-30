@@ -164,14 +164,58 @@ func (tx *jsonTransaction) String() string {
 }
 
 type jsonTransactionReceipt struct {
-	Hash              common.Hash    `json:"transactionHash"`
-	TransactionIndex  uint64         `json:"transactionIndex"`
-	BlockNumber       json.Number    `json:"blockNumber"`
-	BlockHash         common.Hash    `json:"blockHash"`
-	CumulativeGasUsed json.Number    `json:"cumulativeGasUsed"`
-	GasUsed           json.Number    `json:"gasUsed"`
-	ContractAddress   common.Address `json:"contractAddress"`
-	Logs              []jsonLog      `json:"logs"`
+	BlockHash         common.Hash     	`json:"blockHash"`
+	BlockNumber       json.Number 		`json:"blockNumber"`
+	Hash              common.Hash    	`json:"transactionHash"`
+	TransactionIndex  uint64   			`json:"transactionIndex"`
+	From			  common.Address 	`json:"from"`
+	To				  common.Address 	`json:"to"`
+	Root			  []byte  			`json:"root"`
+	Status			  json.Number 		`json:"status"`
+	GasUsed           json.Number 		`json:"gasUsed"`
+	CumulativeGasUsed json.Number 		`json:"cumulativeGasUsed"`
+	LogsBloom		  []byte   			`json:"logsBloom"`
+	Logs              []jsonLog    		`json:"logs"`
+	ContractAddress   common.Address  	`json:"contractAddress"`
+}
+
+func (r *jsonTransactionReceipt) UnmarshalJSON(input []byte) error {
+	type jsonTransactionReceipt struct{
+		BlockHash         string     	`json:"blockHash"`
+		BlockNumber       json.Number 	`json:"blockNumber"`
+		Hash              string    	`json:"transactionHash"`
+		TransactionIndex  json.Number   `json:"transactionIndex"`
+		From			  string 		`json:"from"`
+		To				  string 		`json:"to"`
+		Root			  string  		`json:"root"`
+		Status			  json.Number 	`json:"status"`
+		GasUsed           json.Number 	`json:"gasUsed"`
+		CumulativeGasUsed json.Number 	`json:"cumulativeGasUsed"`
+		LogsBloom		  string   		`json:"logsBloom"`
+		Logs              []jsonLog    	`json:"logs"`
+		ContractAddress   string  	    `json:"contractAddress"`
+	}
+	var dec jsonTransactionReceipt
+	if err := json.Unmarshal(input, &dec); err != nil {
+		return err
+	}
+
+	r.BlockHash = common.StringToHash(dec.BlockHash)
+	r.BlockNumber = dec.BlockNumber
+	r.Hash = common.StringToHash(dec.Hash)
+	index, _ := dec.TransactionIndex.Int64()
+	r.TransactionIndex = uint64(index)
+	r.From = common.StringToAddress(dec.From)
+	r.To = common.StringToAddress(dec.To)
+	r.Root = common.HexToBytes(dec.Root)
+	r.Status = dec.Status
+	r.GasUsed = dec.GasUsed
+	r.CumulativeGasUsed = dec.CumulativeGasUsed
+	r.LogsBloom = common.HexToBytes(dec.LogsBloom)
+	r.Logs = dec.Logs
+	r.ContractAddress = common.StringToAddress(dec.ContractAddress)
+
+	return nil
 }
 
 func (r *jsonTransactionReceipt) ToTransactionReceipt() (receipt *common.TransactionReceipt) {
@@ -183,6 +227,7 @@ func (r *jsonTransactionReceipt) ToTransactionReceipt() (receipt *common.Transac
 	receipt.CumulativeGasUsed = jsonNumbertoInt(r.CumulativeGasUsed)
 	receipt.GasUsed = jsonNumbertoInt(r.GasUsed)
 	receipt.ContractAddress = r.ContractAddress
+	receipt.Status = jsonNumbertoInt(r.Status)
 	receipt.Logs = make([]common.Log, 0)
 	for _, l := range r.Logs {
 		receipt.Logs = append(receipt.Logs, l.ToLog())

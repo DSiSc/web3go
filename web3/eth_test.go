@@ -199,12 +199,12 @@ func (suite *EthTestSuite) Test_Sign() {
 func (suite *EthTestSuite) Test_SendTransaction() {
 	eth := suite.eth
 	req := &common.TransactionRequest{
-		From:     common.NewAddress(common.HexToBytes("0xb60e8dd61c5d32be8058bb8eb970870f07233155")),
-		To:       common.NewAddress(common.HexToBytes("0xd46e8dd67c5d32be8058bb8eb970870f07244567")),
-		Gas:      big.NewInt(0x76c0),
-		GasPrice: big.NewInt(0x9184e72a000),
-		Value:    big.NewInt(0x9184e72a),
-		Data:     common.HexToBytes("0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"),
+		From:     "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+		To:       "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
+		Gas:      "0x76c0",
+		GasPrice: "0x9184e72a000",
+		Value:    "0x9184e72a",
+		Data:     "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675",
 	}
 	tx, err := eth.SendTransaction(req)
 	assert.NoError(suite.T(), err, "Should be no error")
@@ -227,12 +227,12 @@ func (suite *EthTestSuite) Test_SendRawTransaction() {
 func (suite *EthTestSuite) Test_Call() {
 	eth := suite.eth
 	req := &common.TransactionRequest{
-		From:     common.NewAddress(common.HexToBytes("0xb60e8dd61c5d32be8058bb8eb970870f07233155")),
-		To:       common.NewAddress(common.HexToBytes("0xd46e8dd67c5d32be8058bb8eb970870f07244567")),
-		Gas:      big.NewInt(0x76c0),
-		GasPrice: big.NewInt(0x9184e72a000),
-		Value:    big.NewInt(0x9184e72a),
-		Data:     common.HexToBytes("0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"),
+		From:     "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+		To:       "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
+		Gas:      "0x76c0",
+		GasPrice: "0x9184e72a000",
+		Value:    "0x9184e72a",
+		Data:     "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675",
 	}
 	result, err := eth.Call(req, "latest")
 	assert.NoError(suite.T(), err, "Should be no error")
@@ -245,12 +245,12 @@ func (suite *EthTestSuite) Test_Call() {
 func (suite *EthTestSuite) Test_EstimateGas() {
 	eth := suite.eth
 	req := &common.TransactionRequest{
-		From:     common.NewAddress(common.HexToBytes("0xb60e8dd61c5d32be8058bb8eb970870f07233155")),
-		To:       common.NewAddress(common.HexToBytes("0xd46e8dd67c5d32be8058bb8eb970870f07244567")),
-		Gas:      big.NewInt(0x76c0),
-		GasPrice: big.NewInt(0x9184e72a000),
-		Value:    big.NewInt(0x9184e72a),
-		Data:     common.HexToBytes("0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"),
+		From:     "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+		To:       "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
+		Gas:      "0x76c0",
+		GasPrice: "0x9184e72a000",
+		Value:    "0x9184e72a",
+		Data:     "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675",
 	}
 	gas, err := eth.EstimateGas(req, "latest")
 	assert.NoError(suite.T(), err, "Should be no error")
@@ -320,7 +320,7 @@ func (suite *EthTestSuite) Test_GetTransactionByHash() {
 	eth := suite.eth
 	tx := &common.Transaction{
 		Hash:             common.NewHash(common.HexToBytes("0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b")),
-		Nonce:            common.NewHash(common.HexToBytes("0x")),
+		Nonce:            big.NewInt(0),
 		BlockHash:        common.NewHash(common.HexToBytes("0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b")),
 		BlockNumber:      big.NewInt(0x15df),
 		TransactionIndex: 0x1,
@@ -341,7 +341,7 @@ func (suite *EthTestSuite) Test_GetTransactionByHashAndIndex() {
 	eth := suite.eth
 	tx := &common.Transaction{
 		Hash:             common.NewHash(common.HexToBytes("0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b")),
-		Nonce:            common.NewHash(common.HexToBytes("0x")),
+		Nonce:            big.NewInt(0),
 		BlockHash:        common.NewHash(common.HexToBytes("0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b")),
 		BlockNumber:      big.NewInt(0x15df),
 		TransactionIndex: 0x1,
@@ -362,7 +362,7 @@ func (suite *EthTestSuite) Test_GetTransactionByNumberAndIndex() {
 	eth := suite.eth
 	tx := &common.Transaction{
 		Hash:             common.NewHash(common.HexToBytes("0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b")),
-		Nonce:            common.NewHash(common.HexToBytes("0x")),
+		Nonce:            big.NewInt(0),
 		BlockHash:        common.NewHash(common.HexToBytes("0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b")),
 		BlockNumber:      big.NewInt(0x15df),
 		TransactionIndex: 0x1,

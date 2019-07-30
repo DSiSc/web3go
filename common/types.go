@@ -152,14 +152,19 @@ type Log struct {
 
 // TransactionReceipt ...
 type TransactionReceipt struct {
+	BlockHash         Hash     `json:"blockHash"`
+	BlockNumber       *big.Int `json:"blockNumber"`
 	Hash              Hash     `json:"transactionHash"`
 	TransactionIndex  uint64   `json:"transactionIndex"`
-	BlockNumber       *big.Int `json:"blockNumber"`
-	BlockHash         Hash     `json:"blockHash"`
-	CumulativeGasUsed *big.Int `json:"cumulativeGasUsed"`
+	From			  Address `json:"from"`
+	To				  Address `json:"to"`
+	Root			  []byte   `json:"root"`
+	Status			  *big.Int `json:"status"`
 	GasUsed           *big.Int `json:"gasUsed"`
-	ContractAddress   Address  `json:"contractAddress"`
+	CumulativeGasUsed *big.Int `json:"cumulativeGasUsed"`
+	LogsBloom		  []byte   `json:"logsBloom"`
 	Logs              []Log    `json:"logs"`
+	ContractAddress   Address  `json:"contractAddress"`
 }
 
 func (tx *TransactionReceipt) String() string {

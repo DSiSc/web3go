@@ -142,7 +142,7 @@ func (eth *MockEthAPI) Do(request rpc.Request) (response rpc.Response, err error
 	case "eth_getTransactionByHash":
 		tx := &common.Transaction{
 			Hash:             common.NewHash(common.HexToBytes("0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b")),
-			Nonce:            common.NewHash(common.HexToBytes("0x")),
+			Nonce:            big.NewInt(0),
 			BlockHash:        common.NewHash(common.HexToBytes("0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b")),
 			BlockNumber:      big.NewInt(0x15df),
 			TransactionIndex: 0x1,
@@ -157,7 +157,7 @@ func (eth *MockEthAPI) Do(request rpc.Request) (response rpc.Response, err error
 	case "eth_getTransactionByBlockHashAndIndex":
 		tx := &common.Transaction{
 			Hash:             common.NewHash(common.HexToBytes("0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b")),
-			Nonce:            common.NewHash(common.HexToBytes("0x")),
+			Nonce:            big.NewInt(0),
 			BlockHash:        common.NewHash(common.HexToBytes("0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b")),
 			BlockNumber:      big.NewInt(0x15df),
 			TransactionIndex: 0x1,
@@ -172,7 +172,7 @@ func (eth *MockEthAPI) Do(request rpc.Request) (response rpc.Response, err error
 	case "eth_getTransactionByBlockNumberAndIndex":
 		tx := &common.Transaction{
 			Hash:             common.NewHash(common.HexToBytes("0xc6ef2fc5426d6ad6fd9e2a26abeab0aa2411b7ab17f30a99d3cb96aed1d1055b")),
-			Nonce:            common.NewHash(common.HexToBytes("0x")),
+			Nonce:            big.NewInt(0),
 			BlockHash:        common.NewHash(common.HexToBytes("0xbeab0aa2411b7ab17f30a99d3cb9c6ef2fc5426d6ad6fd9e2a26a6aed1d1055b")),
 			BlockNumber:      big.NewInt(0x15df),
 			TransactionIndex: 0x1,
